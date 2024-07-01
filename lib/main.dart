@@ -13,13 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Location Widget Demo',
+      title: 'Location Widget',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Location Widget Demo'),
+          title: Text('Home'),
+          backgroundColor: Colors.blue,
         ),
         body: LocationWidget(),
       ),

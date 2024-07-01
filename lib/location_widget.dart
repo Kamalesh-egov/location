@@ -8,18 +8,26 @@ class LocationWidget extends StatefulWidget {
 
 class _LocationWidgetState extends State<LocationWidget> {
   final List<Location> _locations = [
-    Location('New York', 'USA'),
-    Location('Los Angeles', 'USA'),
-    Location('Chicago', 'USA'),
-    Location('Houston', 'USA'),
-    Location('Phoenix', 'USA'),
-    Location('Berlin', 'Germany'),
-    Location('Munich', 'Germany'),
-    Location('Hamburg', 'Germany'),
-    // Add more locations as needed
+    Location('Amsterdam', 'NetherLands'),
+    Location('Bangalore', 'India'),
+    Location('Chennai', 'India'),
+    Location('Delhi', 'India'),
+    Location('Kiev', 'Ukraine'),
+    Location('Kiev', 'United Kingdom'),
+    Location('Krakow', 'Poland'),
+    Location('Mumbai', 'India'),
+    Location('Not Provided', 'Canada'),
+    Location('Not Provided', 'China'),
+    Location('Not Provided', 'India'),
+    Location('Not Provided', 'Poland'),
+    Location('Not Provided', 'Russia'),
+    Location('Seoul', 'Korea'),
+    Location('Shangai', 'China'),
+    Location('Toronto', 'Canada'),
+    Location('Zurich', 'Switzerland'),
   ];
 
-  late List<Location> _filteredLocations;  // Use 'late' keyword for delayed initialization
+  late List<Location> _filteredLocations;
   String _searchTerm = '';
   bool _isMinimized = false;
   bool _isCollapsed = false;
@@ -61,63 +69,149 @@ class _LocationWidgetState extends State<LocationWidget> {
   }
 
   Widget _buildNormalView() {
-    return Column(
-      children: [
-        _buildHeader(),
-        _buildSearchBox(),
-        _buildAlphabetIndex(),
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: _filteredLocations.length,
-            itemBuilder: (context, index) {
-              final location = _filteredLocations[index];
-              return ListTile(
-                title: Text(location.toString()),
-              );
-            },
-          ),
+    return Container(
+      width: 300,
+      height: 600,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(10), // Adjust the padding as needed for internal content
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildHeader(),
+            _buildSearchBox(),
+            SizedBox(height: 10), // Example of spacing between search box and content
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: _filteredLocations.length,
+                      itemBuilder: (context, index) {
+                        final location = _filteredLocations[index];
+                        return ListTile(
+                          title: Text(location.toString()),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 20), // Adjust width as needed
+                  Container(
+                    width: 20, // Adjust width as needed
+                    child: _buildAlphabetIndex(),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
+
+
   Widget _buildMinimizedView() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: IconButton(
-        icon: Icon(Icons.expand),
-        onPressed: () {
-          setState(() {
-            _isMinimized = false;
-          });
-        },
+    return Container(
+      color: Colors.grey[300],
+      width: 300,
+      height: 70,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Locations',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
+            ),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.tablet_sharp),
+              onPressed: () {
+                setState(() {
+                  _isMinimized = false;
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                setState(() {
+                  _isCollapsed = true;
+                  _isMinimized = false;
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCollapsedView() {
-    return Align(
-      alignment: Alignment.centerRight,
+    return Container(
+      width: 70,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+      ),
       child: Column(
         children: [
           IconButton(
-            icon: Icon(Icons.expand),
+            icon: Icon(Icons.keyboard_tab_rounded),
             onPressed: () {
               setState(() {
                 _isCollapsed = false;
               });
             },
           ),
+          Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: Transform.rotate(
+              angle: -90 * 3.1415926535897932 / 180,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                    'Locations',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+          ),
         ],
       ),
     );
   }
 
+
   Widget _buildHeader() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
+            'Locations',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            ),
+        ),
+        Spacer(),
         IconButton(
           icon: Icon(Icons.minimize),
           onPressed: () {
@@ -138,27 +232,51 @@ class _LocationWidgetState extends State<LocationWidget> {
     );
   }
 
-  Widget _buildSearchBox() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: 'Search',
-          border: OutlineInputBorder(),
-        ),
-        onChanged: _filterLocations,
+Widget _buildSearchBox() {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      color: Colors.white,
+      height: 45,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Icon(Icons.search),
+          ),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Filter locations',
+                border: OutlineInputBorder(borderSide: BorderSide.none),
+                contentPadding: EdgeInsets.symmetric(vertical: 12.0),
+              ),
+              onChanged: _filterLocations,
+            ),
+          ),
+        ],
       ),
-    );
+    ),
+  );
+}
+
+  List<String> _getAlphabetIndex() {
+    final Set<String> letters = _filteredLocations
+        .map((location) => location.city[0].toUpperCase())
+        .toSet();
+    final List<String> sortedLetters = letters.toList()..sort();
+    return sortedLetters;
   }
 
   Widget _buildAlphabetIndex() {
+    final letters = _getAlphabetIndex();
     return Container(
       height: 40,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 26,
+        scrollDirection: Axis.vertical,
+        itemCount: letters.length,
         itemBuilder: (context, index) {
-          final letter = String.fromCharCode(65 + index);
+          final letter = letters[index];
           return GestureDetector(
             onTap: () => _scrollToLetter(letter),
             child: Padding(
